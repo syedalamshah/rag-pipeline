@@ -1,3 +1,5 @@
+[![Python CI](https://github.com/syedalamshah/rag-pipeline/actions/workflows/python-ci.yml/badge.svg)](https://github.com/syedalamshah/rag-pipeline/actions)
+
 RAG Pipeline
 ============
 
