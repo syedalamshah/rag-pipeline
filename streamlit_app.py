@@ -1,7 +1,9 @@
 __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 import streamlit as st
+import time
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_chroma import Chroma
 from dotenv import load_dotenv
@@ -42,7 +44,7 @@ h1 { color: #1a1a1a; }
 """, unsafe_allow_html=True)
 
 st.title("Document Q&A")
-st.caption("RAG Pipeline — Gemini + ChromaDB")
+st.caption("RAG Pipeline - Gemini + ChromaDB")
 
 @st.cache_resource
 def load_pipeline():
@@ -63,10 +65,13 @@ def load_pipeline():
 
 retriever, llm = load_pipeline()
 
-def get_answer(question):
-    relevant_chunks = retriever.invoke(question)
-    context = "\n\n".join([chunk.page_content for chunk in relevant_chunks])
-    prompt = f"""Use the following context to answer the question.
+def get_answer(question, max_retries=3):
+    last_error = None
+    for attempt in range(max_retries):
+        try:
+            relevant_chunks = retriever.invoke(question)
+            context = "\n\n".join([chunk.page_content for chunk in relevant_chunks])
+            prompt = f"""Use the following context to answer the question.
 
 Context:
 {context}
@@ -74,8 +79,13 @@ Context:
 Question: {question}
 
 Answer:"""
-    response = llm.invoke(prompt)
-    return response.content
+            response = llm.invoke(prompt)
+            return response.content
+        except Exception as e:
+            last_error = e
+            if attempt < max_retries - 1:
+                time.sleep(2 * (attempt + 1))
+    raise last_error
 
 if "history" not in st.session_state:
     st.session_state.history = []
@@ -86,8 +96,11 @@ with st.form("query_form", clear_on_submit=True):
 
 if submitted and query:
     with st.spinner("Searching document and generating answer..."):
-        answer = get_answer(query)
-    st.session_state.history.append((query, answer))
+        try:
+            answer = get_answer(query)
+            st.session_state.history.append((query, answer))
+        except Exception as e:
+            st.error("The request timed out after multiple attempts. Please try again in a moment.")
 
 for q, a in reversed(st.session_state.history):
     st.markdown(f'<div class="answer-box"><div class="question-text">Q: {q}</div>{a}</div>', unsafe_allow_html=True)
