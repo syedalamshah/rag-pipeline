@@ -268,6 +268,16 @@ This repository is a hands-on demonstration of RAG principles and how to integra
 - Authentication and authorization
 - Monitoring and observability
 - Cost controls and quotas
+## Live Demo
+Try it here: https://rag-pipeline-hjxoy9tf7ulqmh2qtvu2jo.streamlit.app
+
+## Tech Stack
+- Python 3.13
+- LangChain + LangChain-Chroma
+- Google Gemini (gemini-2.5-flash, gemini-embedding-001)
+- ChromaDB (vector store)
+- Streamlit (UI)
+- Deployed on Streamlit Community Cloud
 
 ## License
 
