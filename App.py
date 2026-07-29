@@ -46,4 +46,4 @@ Question: {question}
 Answer:"""
     
     response = llm.invoke(prompt)
-    print(f"\nAI: {response.content}\n")AG pipeline built with Gemini, LangChain and ChromaDB
+    print(f"\nAI: {response.content}\n")

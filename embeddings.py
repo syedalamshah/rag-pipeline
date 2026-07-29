@@ -10,7 +10,7 @@ embeddings = GoogleGenerativeAIEmbeddings(
 )
 
 
-result = embeddings.embed_query("What is IPv4?")
+result = embeddings.embed_query("What is IPv6?")
 
 print(f"Type: {type(result)}")
 print(f"Length: {len(result)}")
