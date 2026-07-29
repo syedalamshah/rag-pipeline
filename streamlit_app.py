@@ -50,7 +50,8 @@ st.caption("RAG Pipeline - Gemini + ChromaDB")
 def load_pipeline():
     embeddings = GoogleGenerativeAIEmbeddings(
         model="models/gemini-embedding-001",
-        google_api_key=os.getenv("GOOGLE_API_KEY")
+        google_api_key=os.getenv("GOOGLE_API_KEY"),
+        request_options={"timeout": 60}
     )
     vectorstore = Chroma(
         persist_directory="./chroma_db",
@@ -58,7 +59,8 @@ def load_pipeline():
     )
     llm = ChatGoogleGenerativeAI(
         model="gemini-2.5-flash",
-        google_api_key=os.getenv("GOOGLE_API_KEY")
+        google_api_key=os.getenv("GOOGLE_API_KEY"),
+        timeout=60
     )
     retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
     return retriever, llm
