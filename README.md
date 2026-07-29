@@ -192,7 +192,7 @@ Return: "IPv4 stands for Internet Protocol Version 4..."
 
 ### Protecting Your API Key
 
-⚠️ **Never commit your API key to version control.**
+**Never commit your API key to version control.**
 
 - **Use `.env` file locally** — Store your `GOOGLE_API_KEY` in `.env` (already in `.gitignore`)
 - **Never hardcode secrets** — Don't write keys directly in Python files or notebooks
@@ -290,5 +290,3 @@ Found a bug or want to improve the code? Contributions are welcome!
 - **Email** — Contact via repository maintainer
 
 ---
-
-**Made with ❤️ for learning. Happy coding!**
